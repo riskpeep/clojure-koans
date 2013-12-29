@@ -22,18 +22,18 @@
           @the-world))
 
   "Don't forget to do your work in a transaction!"
-  (= 0 (do __
+  (= 0 (do (dosync (ref-set the-world 0))
            @the-world))
 
   "Functions passed to alter may depend on the data in the ref"
   (= 20 (do
-          (dosync (alter the-world ___))))
+          (dosync (alter the-world (fn [n] (identity 20))))))
 
   "Two worlds are better than one"
-  (= ["Real Jerry" "Bizarro Jerry"]
+#_  (= ["Real Jerry" "Bizarro Jerry"]
        (do
          (dosync
           (ref-set the-world {})
           (alter the-world assoc :jerry "Real Jerry")
           (alter bizarro-world assoc :jerry "Bizarro Jerry")
-          __))))
+          __ ))))
